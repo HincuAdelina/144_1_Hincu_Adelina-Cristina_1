@@ -164,7 +164,7 @@ public:
     }
 
     //constructor cu parametri
-    //Vector_Complex(int n, Complex* vec): m_Nr(n), m_Vector(vec) {} //nu stiu daca e bine
+    Vector_Complex(int n, Complex* vec): m_Nr(n), m_Vector(vec) {}
 
     //constructor de copiere
     Vector_Complex(const Vector_Complex &vec)
@@ -191,7 +191,22 @@ public:
 
     void SetNr(int n)
     {
-        m_Nr = n;
+        if(n<m_Nr)
+        {
+             m_Nr = n;
+        }
+        else{
+            Complex *new_m_Vector = new Complex[n];
+            for(int i=0;i<m_Nr;i++) new_m_Vector[i] = m_Vector[i];
+            delete[] m_Vector;
+
+            for(int i=m_Nr;i<n;i++){
+                new_m_Vector[i].SetReal(0);
+                new_m_Vector[i].SetImaginary(0);
+            }
+            m_Vector = new_m_Vector;
+            m_Nr = n;
+        }
     }
 
     //getteri
@@ -211,18 +226,19 @@ public:
 
     Vector_Complex& operator= (const Vector_Complex& vec)
     {
-        //mai intai trebuie sa dezalocam memoria pe care o avea _arr
+        //mai intai trebuie sa dezalocam memoria pe care o avea m_Vector
         delete[] m_Vector;
         m_Nr=0;
         m_Vector=NULL;
 
-        //acum facem assignment-ul
+        //acum facem atribuirea
         m_Nr=vec.m_Nr;
         m_Vector=new Complex[m_Nr];
         for(int i=0; i<m_Nr; i++)
         {
             m_Vector[i]=vec.m_Vector[i];
         }
+    return *this;
     }
 
     //determinarea vectorului modulelor
@@ -235,23 +251,22 @@ public:
         return vec;
     }
 
-    //ordonarea crescatoare a vectorului modulelor
-    void ordonare_crescatoare(Vector_Complex v)
+    //ordonarea crescatoare a vectorului dupa module
+    void ordonare_crescatoare()
     {
         Vector_Complex vec;
-        vec=v.modul();      //vectorul modulelor
         Complex aux;
-        for(int i=0; i<vec.m_Nr-1; i++)     //deoarece metoda modul() intoarce un Vector_Complex,
-        {                                        //care are partea reala a numerelor complexe egala cu modulul,
-            for(int j=i+1; j<vec.m_Nr; j++)     //iar partea imaginara = 0,
-                if(vec.m_Vector[i].GetReal() > vec.m_Vector[j].GetReal()) //comparam partile reale, de tip double
+        for(int i=0; i<m_Nr-1; i++)
+        {
+            for(int j=i+1; j<m_Nr; j++)
+                if(m_Vector[i].Abs() > m_Vector[j].Abs())
                 {
-                    aux=vec.m_Vector[i];
-                    vec.m_Vector[i]=vec.m_Vector[j];
-                    vec.m_Vector[j]=aux;
+                    aux=m_Vector[i];
+                    m_Vector[i]=m_Vector[j];
+                    m_Vector[j]=aux;
                 }
         }
-        cout<<vec;
+        cout<<*this;
     }
 
     //determinarea sumei tuturor componentelor vectorului
@@ -273,6 +288,10 @@ std::ostream& operator <<(std::ostream& out, const Vector_Complex& vec)
 
 std::istream& operator >>(std::istream& in,  Vector_Complex& vec)
 {
+    delete[] vec.m_Vector;
+    vec.m_Nr=0;
+    vec.m_Vector=NULL;
+
     cout<<"Numarul de elemente ale vectorului: ";
     in>>vec.m_Nr;
     vec.m_Vector=new Complex[vec.m_Nr];
@@ -354,7 +373,7 @@ void Meniu()
         else if(optiune == 4)
         {
             Vector_Complex v;
-            vector_general.ordonare_crescatoare(vector_general);
+            vector_general.ordonare_crescatoare();
             cout<<endl;
         }
         else if(optiune == 5)
@@ -377,49 +396,19 @@ void Meniu()
     //eliberam memoria
     delete[] numbers;
 }
+void Demo()
+{
+    Complex a(2);
+    Vector_Complex v1(3,a);
+//Vector_Complex v2;
+//cout<<(v2=v1);
+    v1.SetNr(5);
+    cout<<v1;
+}
 int main()
 {
 
-    /* Complex a;
-     a.SetReal(1);
-     a.SetImaginary(2);
-     cout<<a<<endl;
-     Vector_Complex v1(2,a),v;
-     cin>>v;
-     cout<<v;
-     cout<<v1<<endl;
-     Vector_Complex v2(v1);
-     cout<<v2<<endl;
-     cout<<v1.GetNr()<<endl;
-     cout<<v1.GetVector()<<endl;
-     v1.SetNr(3);
-     //v1.SetVector(a);
-     cout<<v1<<endl;
-    Vector_Complex v1,v2;
-    cin>>v1;
-    v2=v1;
-    cout<<v2;
-    */
-//   Complex b;
-//   int nr;
-//   Vector_Complex *v1;
-/* Complex* v2;
-    cin>>v;
-    //cout<<v;
-    b=v.suma();
-    cout<<b<<endl;
-    v1=v.modul();
-    cout<<"v1= "<<v1<<endl<<"v= "<<v<<endl;
-    v1.ordonare_crescatoare(v1);
-    cout<<"  dupa ordonare";
-    cout<<endl<<"v1= "<<v1;
-*/
-    // v1=citesteNobiecte(nr);
-
-    //OptiuniMeniu();
-
-
     Meniu();
-
+    //Demo();
     return 0;
 }
