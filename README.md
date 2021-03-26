@@ -20,3 +20,14 @@ Tema 1. Clasa ”Vector_Complex”
 - metoda publica pentru determinarea vectorului modulelor, folosind metoda de determinare a modulului din clasa numar complex;
 - metoda publica pentru sortarea crescatoare dupa module a vectorului;
 - metoda publica pentru calculul sumei tuturor elementelor vectorului, care sa utilizeze operatorul + din clasa de numere complexe;
+
+Lista cerintelor bonus pentru prima lucrare practica (pentru maxim 0.2 puncte bonus)
+Tema 1:
+- suprascriere operator =
+- operator == si operator !=
+- operatorii + si –   – operatorii unari, exp: “+v”, “-v”
+– operatorii binari, sa functioneze in forma vector - vector, complex + vector, vector + complex (in ultimele 2 cazuri, rezultatul trebuie sa fie echivalent cu adunarea dintre vector si un alt vector de aceeasi dimensiune, cu toti membrii de valuarea complexului dat ca parametru); la fel si pentru scadere
+- operatorii +=, -=
+- operatorul !    – testeaza pozitiv, daca vectorul are cel putin un element diferit de 0
+- operator []    – furnizeaza o referinta la al n-lea element din vector
+– sa fie posibile constructii ca: "cin>>v[i]", "cout<<v[i]", "v[i]=x", "x=v[i]", cu efectul obisnuit
